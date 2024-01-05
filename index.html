@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Prerender Network Test Page</title>
+</head>
+
+<style>
+    body {
+        height: 100vh;
+        width: 100vw;
+        font-family: sans-serif;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    p {
+        text-align: justify;
+    }
+
+    .grid-rows {
+        display: grid;
+        grid-template-rows: auto auto;
+        width: 66%;
+    }
+
+    .flex-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    #content {
+        width: 33%;
+    }
+
+    @media only screen and (max-width: 1800px) {
+        #content {
+            width: 50%;
+        }
+    }
+</style>
+
+<script>
+    function addLinkTag(reltype) {
+        const linktag = document.createElement("link");
+        linktag.rel = reltype;
+        linktag.href = websites[Math.floor(Math.random() * websites.length)]; // defined below
+        document.head.appendChild(linktag);
+
+        visualLog("Added " + reltype + " for " + linktag.href, reltype);
+        console.info("Added " + reltype + " for " + linktag.href);
+    }
+</script>
+
+<body>
+    <section class="flex-center">
+        <div class="grid-rows" id="content">
+            <div>
+                <h1>Prerender/Prefetch Test Page</h1>
+                <div>
+                    <p>Clicking either button below will add a <code>&lt;link rel="prerender"&gt;</code> or
+                        <code>&lt;link rel="prefetch"&gt;</code> tag (pointing to a random website from an embedded
+                        list) to the head of the document.
+                        <br>
+                        This should demonstrate that, in Chromium, <code>rel="prefetch"</code> network activity is shown
+                        in the Developer tools' Network tab, but <code>rel="prerender"</code> related network activity
+                        is not.
+                        <br>
+                        You can view the page source <a href="https://github.com/weebney/prerender-test-page">here</a>;
+                        see also the <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1515601">Chromium
+                            ticket</a>.
+                    </p>
+                </div>
+            </div>
+            <div>
+                <button onclick='addLinkTag("prerender")'>Add new prerender link tag</button>
+                <button onclick='addLinkTag("prefetch")'>Add new prefetch link tag</button>
+                <button onclick='window.location.reload()'>🔄</button>
+            </div>
+    </section>
+
+    <div id="logger">
+        <p>Error!</p>
+        <br>
+        <p></p>
+    </div>
+</body>
+
+<style>
+    #logger {
+        display: flex;
+        visibility: hidden;
+        position: absolute;
+        top: 1em;
+        left: 1em;
+        text-align: center;
+        border: 1px solid black;
+        border-radius: 1em;
+        padding: 1em;
+        z-index: 9999;
+        transition: opacity 0.25s;
+    }
+</style>
+
+<!-- logging and websites list -->
+<script>
+    function visualLog(msg, type) {
+        const vlelem = document.getElementById("logger");
+        vlelem.innerText = msg;
+        (type === "prefetch") ? vlelem.style.backgroundColor = "lightgreen" : vlelem.style.backgroundColor = "lightcoral";
+        vlelem.style.opacity = 100;
+        vlelem.style.visibility = "unset";
+
+        setTimeout(() => {
+            vlelem.style.opacity = 0;
+        }, 1000);
+    }
+
+    // this is derived from an old list of the 1000 most popular websites
+    const websites = [
+        "https://google.com",
+        "https://facebook.com",
+        "https://youtube.com",
+        "https://baidu.com",
+        "https://yahoo.com",
+        "https://amazon.com",
+        "https://wikipedia.org",
+        "https://qq.com",
+        "https://twitter.com",
+        "https://slashdot.org",
+        "https://google.co.in",
+        "https://taobao.com",
+        "https://live.com",
+        "https://sina.com.cn",
+        "https://yahoo.co.jp",
+        "https://linkedin.com",
+        "https://weibo.com",
+        "https://ebay.com",
+        "https://google.co.jp",
+        "https://yandex.ru",
+        "https://bing.com",
+        "https://vk.com",
+        "https://google.de",
+        "https://instagram.com",
+        "https://t.co",
+        "https://msn.com",
+        "https://amazon.co.jp",
+        "https://tmall.com",
+        "https://google.co.uk",
+        "https://pinterest.com",
+        "https://ask.com",
+        "https://reddit.com",
+        "https://wordpress.com",
+        "https://mail.ru",
+        "https://google.fr",
+        "https://blogspot.com",
+        "https://paypal.com",
+        "https://onclickads.net",
+        "https://google.com.br",
+        "https://tumblr.com",
+        "https://apple.com",
+        "https://google.ru",
+        "https://aliexpress.com",
+        "https://sohu.com",
+        "https://microsoft.com",
+        "https://imgur.com",
+        "https://google.it",
+        "https://imdb.com",
+    ]
+</script>
+
+<!-- created by weebney in Jan 2024, licensed BSD0 -->
+
+</html>
